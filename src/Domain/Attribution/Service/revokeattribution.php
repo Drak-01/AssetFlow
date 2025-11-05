@@ -21,7 +21,10 @@ class revokeattribution
     {
         $actifs = $this->actifsRepository->find($attribution->getActif()->getId());
 
-        $attribution->setStatut('retire');
+        $qte = $actifs->getQuantite();
+        $actifs->setQuantite($qte + $attribution->getQuantite());
+
+        $attribution->setStatus('retire');
         $actifs->setStatus('stock');
 
         $this->entityManager->persist($actifs);

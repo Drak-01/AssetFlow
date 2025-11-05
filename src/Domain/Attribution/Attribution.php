@@ -32,7 +32,7 @@ class Attribution
     private ?\DateTimeImmutable $dateFin = null;
 
     #[ORM\Column(length: 20)]
-    private ?string $statut = null;
+    private ?string $status = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $notes = null;
@@ -46,11 +46,17 @@ class Attribution
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $quantite = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $type = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->dateAttribution = new \DateTimeImmutable();
-        $this->statut = 'pending';
+        $this->status = 'pending';
     }
 
     // Getters et Setters
@@ -104,14 +110,14 @@ class Attribution
         return $this;
     }
 
-    public function getStatut(): ?string
+    public function getStatus(): ?string
     {
-        return $this->statut;
+        return $this->status;
     }
 
-    public function setStatut(string $statut): static
+    public function setStatus(string $status): static
     {
-        $this->statut = $statut;
+        $this->status = $status;
         $this->updatedAt = new \DateTimeImmutable();
         return $this;
     }
@@ -163,34 +169,34 @@ class Attribution
     // Méthodes utilitaires
     public function isActive(): bool
     {
-        return $this->statut === 'active';
+        return $this->status === 'active';
     }
 
     public function isPending(): bool
     {
-        return $this->statut === 'pending';
+        return $this->status === 'pending';
     }
 
     public function isCompleted(): bool
     {
-        return $this->statut === 'completed';
+        return $this->status === 'completed';
     }
 
     public function isCancelled(): bool
     {
-        return $this->statut === 'cancelled';
+        return $this->status === 'cancelled';
     }
 
     public function activate(): static
     {
-        $this->statut = 'active';
+        $this->status = 'active';
         $this->updatedAt = new \DateTimeImmutable();
         return $this;
     }
 
     public function complete(): static
     {
-        $this->statut = 'completed';
+        $this->status = 'completed';
         $this->dateFin = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         return $this;
@@ -198,7 +204,7 @@ class Attribution
 
     public function cancel(): static
     {
-        $this->statut = 'cancelled';
+        $this->status = 'cancelled';
         $this->updatedAt = new \DateTimeImmutable();
         return $this;
     }
@@ -226,5 +232,29 @@ class Attribution
         $attribution->setNotes($notes);
 
         return $attribution;
+    }
+
+    public function getQuantite(): ?int
+    {
+        return $this->quantite;
+    }
+
+    public function setQuantite(?int $quantite): static
+    {
+        $this->quantite = $quantite;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): static
+    {
+        $this->type = $type;
+
+        return $this;
     }
 }

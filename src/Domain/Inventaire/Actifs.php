@@ -33,6 +33,12 @@ class Actifs
     #[ORM\Column(nullable: true)]
     public ?string $category;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $type = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $quantite = null;
+
     public function getCategory(): ?string
     {
         return $this->category;
@@ -174,6 +180,30 @@ class Actifs
         if ($this->actifsAttributions->removeElement($actifsAttribution)) {
             $actifsAttribution->removeActif($this);
         }
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getQuantite(): ?int
+    {
+        return $this->quantite;
+    }
+
+    public function setQuantite(?int $quantite): static
+    {
+        $this->quantite = $quantite;
 
         return $this;
     }

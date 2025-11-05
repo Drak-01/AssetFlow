@@ -4,7 +4,7 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="16">
+          <list size="20">
             <item index="0" class="java.lang.String" itemvalue="x-data" />
             <item index="1" class="java.lang.String" itemvalue="x-init" />
             <item index="2" class="java.lang.String" itemvalue="@click.outside" />
@@ -21,6 +21,10 @@
             <item index="13" class="java.lang.String" itemvalue="x-text" />
             <item index="14" class="java.lang.String" itemvalue="x-if" />
             <item index="15" class="java.lang.String" itemvalue="x-transition" />
+            <item index="16" class="java.lang.String" itemvalue="x-for" />
+            <item index="17" class="java.lang.String" itemvalue="x-tooltip" />
+            <item index="18" class="java.lang.String" itemvalue=":key" />
+            <item index="19" class="java.lang.String" itemvalue="@change" />
           </list>
         </value>
       </option>

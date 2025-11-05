@@ -13,12 +13,13 @@ class createAttributionDTO
     #[Assert\NotBlank(message: "L'actif est obligatoire")]
     public ?int $actifs = null;
 
-
     #[Assert\NotBlank(message: "La date d'attribution est obligatoire")]
     public ?\DateTimeInterface $dateAttribution = null;
 
     #[Assert\Length(max: 1000)]
     public ?string $notes = null;
+
+    public ?int $quantite = null;
 
     public function __construct()
     {

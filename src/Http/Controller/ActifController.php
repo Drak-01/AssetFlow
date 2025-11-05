@@ -23,6 +23,7 @@ class ActifController extends AbstractController
     #[Route('', name: 'index')]
     public function index(Request $request): Response
     {
+        $user = $this->getUser();
         // Récupération des paramètres de filtrage
         $search = $request->get('search');
         $category = $request->get('category');
@@ -57,6 +58,7 @@ class ActifController extends AbstractController
             'search' => $search,
             'category' => $category,
             'status' => $status,
+            'user' => $user,
         ]);
     }
 
@@ -66,7 +68,6 @@ class ActifController extends AbstractController
         if($actifs->getSlug() === $slug){
             return $this->redirectToRoute('inventaire_index');
         }
-
 
     }
 

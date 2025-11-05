@@ -1,5 +1,298 @@
 {% extends 'partials/layout.html.twig' %}
 
 {% block content %}
-    Dashboard +++++
+    <div x-data="dashboard()" class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+        <!-- Header -->
+        <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-4">
+                    <div class="flex items-center">
+                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                            Tableau de Bord
+                        </h1>
+                        <span class="ml-3 px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">
+                        Vue Générale
+                    </span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <!-- Dark Mode Toggle -->
+                        <button @click="toggleDarkMode()" class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
+                            <i class="fas" :class="darkMode ? 'fa-sun' : 'fa-moon'"></i>
+                        </button>
+
+                        <!-- Date Selector -->
+                        <div class="relative">
+                            <select x-model="selectedPeriod" @change="updateStats()"
+                                    class="pl-3 pr-10 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="today">Aujourd'hui</option>
+                                <option value="week">Cette semaine</option>
+                                <option value="month" selected>Ce mois</option>
+                                <option value="quarter">Ce trimestre</option>
+                                <option value="year">Cette année</option>
+                            </select>
+                        </div>
+
+                        <!-- Refresh Button -->
+                        <button @click="refreshData()" class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors" title="Actualiser">
+                            <i class="fas fa-sync-alt" :class="{ 'fa-spin': refreshing }"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <!-- Alertes et Notifications -->
+            <div x-show="alerts.length > 0" class="mb-6 space-y-3">
+                <template x-for="alert in alerts" :key="alert.id">
+                    <div :class="{
+                    'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800': alert.type === 'error',
+                    'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800': alert.type === 'warning',
+                    'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800': alert.type === 'success'
+                }" class="p-4 border rounded-lg flex items-center justify-between">
+                        <div class="flex items-center">
+                            <i :class="{
+                            'fas fa-exclamation-circle text-red-500': alert.type === 'error',
+                            'fas fa-exclamation-triangle text-yellow-500': alert.type === 'warning',
+                            'fas fa-check-circle text-green-500': alert.type === 'success'
+                        }" class="mr-3"></i>
+                            <span x-text="alert.message" class="text-sm font-medium text-gray-900 dark:text-white"></span>
+                        </div>
+                        <button @click="removeAlert(alert.id)" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </template>
+            </div>
+
+            <!-- KPI Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Total Actifs -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow duration-300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Actifs</p>
+                            <p class="text-3xl font-bold text-gray-900 dark:text-white mt-2">{{ stats.totalActifs|number_format(0, ',', ' ') }}</p>
+                            <p class="text-sm text-green-600 dark:text-green-400 mt-1">
+                                <i class="fas fa-arrow-up mr-1"></i>
+                                <span>{{ stats.actifsGrowth }}% vs mois dernier</span>
+                            </p>
+                        </div>
+                        <div class="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                            <i class="fas fa-laptop text-2xl text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actifs Attribués -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow duration-300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Actifs Attribués</p>
+                            <p class="text-3xl font-bold text-gray-900 dark:text-white mt-2">{{ stats.actifsAttribues|number_format(0, ',', ' ') }}</p>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-3">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: {{ stats.tauxAttribution }}%"></div>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ stats.tauxAttribution }}% du parc</p>
+                        </div>
+                        <div class="p-3 bg-green-50 dark:bg-green-900/30 rounded-lg">
+                            <i class="fas fa-handshake text-2xl text-green-600 dark:text-green-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- En Restitution -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow duration-300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">En Restitution</p>
+                            <p class="text-3xl font-bold text-gray-900 dark:text-white mt-2">{{ stats.enRestitution|number_format(0, ',', ' ') }}</p>
+                            <p class="text-sm text-red-600 dark:text-red-400 mt-1">
+                                <span>{{ stats.restitutionEnRetard }} en retard</span>
+                            </p>
+                        </div>
+                        <div class="p-3 bg-orange-50 dark:bg-orange-900/30 rounded-lg">
+                            <i class="fas fa-undo-alt text-2xl text-orange-600 dark:text-orange-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Taux Disponibilité -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow duration-300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Disponibilité</p>
+                            <p class="text-3xl font-bold text-gray-900 dark:text-white mt-2">{{ stats.tauxDisponibilite }}%</p>
+                            <p class="text-sm text-blue-600 dark:text-blue-400 mt-1">
+                                <span>{{ stats.actifsDisponibles }} actifs libres</span>
+                            </p>
+                        </div>
+                        <div class="p-3 bg-purple-50 dark:bg-purple-900/30 rounded-lg">
+                            <i class="fas fa-chart-pie text-2xl text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts and Main Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Répartition par Type -->
+                <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Répartition par Type d'Actif</h3>
+                        <div class="flex space-x-2">
+                            <button @click="chartView = 'pie'" :class="{ 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400': chartView === 'pie' }" class="px-3 py-1 text-sm rounded-lg transition-colors">
+                                <i class="fas fa-chart-pie"></i>
+                            </button>
+                            <button @click="chartView = 'bar'" :class="{ 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400': chartView === 'bar' }" class="px-3 py-1 text-sm rounded-lg transition-colors">
+                                <i class="fas fa-chart-bar"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="h-80">
+                        <!-- Chart Container -->
+                        <div class="flex items-center justify-center h-full">
+                            <div class="text-center">
+                                <i class="fas fa-chart-pie text-4xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                                <p class="text-gray-500 dark:text-gray-400">Répartition des {{ stats.totalActifs }} actifs</p>
+                                <div class="mt-4 space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                                    {% for type, count in assetDistribution %}
+                                        <div class="flex justify-between items-center">
+                                            <span>{{ type }}</span>
+                                            <span class="font-medium">{{ count }} ({{ ((count / stats.totalActifs) * 100)|round(1) }}%)</span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activité Récente -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Activité Récente</h3>
+                    <div class="space-y-4">
+                        {% for activity in recentActivities %}
+                            <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                                <div class="{% if activity.type == 'attribution' %}bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400
+                                       {% elseif activity.type == 'restitution' %}bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400
+                                       {% else %}bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400{% endif %} p-2 rounded-lg">
+                                    <i class="{% if activity.type == 'attribution' %}fas fa-handshake
+                                         {% elseif activity.type == 'restitution' %}fas fa-undo-alt
+                                         {% else %}fas fa-tools{% endif %} text-sm"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">{{ activity.title }}</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ activity.description }}</p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ activity.time }}</p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <p class="text-gray-500 dark:text-gray-400 text-center py-4">Aucune activité récente</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Départements -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Utilisation par Département</h3>
+                    <div class="space-y-4">
+                        {% for dept in departmentsUsage %}
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                                        <span class="text-xs font-medium text-blue-600 dark:text-blue-400">{{ dept.initials }}</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-white">{{ dept.name }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ dept.actifs }} actifs • {{ dept.totalUsers }} utilisateurs</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ dept.usage }}%</p>
+                                    <div class="w-20 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-1">
+                                        <div class="bg-blue-600 h-2 rounded-full" style="width: {{ dept.usage }}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <p class="text-gray-500 dark:text-gray-400 text-center py-4">Aucun département</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Prochaines Échéances -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Prochaines Échéances</h3>
+                        <span class="px-2 py-1 text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full">{{ upcomingDeadlines|length }} échéances</span>
+                    </div>
+                    <div class="space-y-3">
+                        {% for deadline in upcomingDeadlines %}
+                            <div class="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="{% if deadline.priority == 'high' %}bg-red-100 dark:bg-red-900/30
+                                           {% elseif deadline.priority == 'medium' %}bg-orange-100 dark:bg-orange-900/30
+                                           {% else %}bg-blue-100 dark:bg-blue-900/30{% endif %} p-2 rounded-lg">
+                                        <i class="{% if deadline.priority == 'high' %}fas fa-exclamation-triangle text-red-600 dark:text-red-400
+                                             {% elseif deadline.priority == 'medium' %}fas fa-clock text-orange-600 dark:text-orange-400
+                                             {% else %}fas fa-calendar text-blue-600 dark:text-blue-400{% endif %} text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-white">{{ deadline.title }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ deadline.type }}</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ deadline.date }}</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ deadline.daysLeft }}</p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <p class="text-gray-500 dark:text-gray-400 text-center py-4">Aucune échéance à venir</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function dashboard() {
+            return {
+                selectedPeriod: 'month',
+                refreshing: false,
+                chartView: 'pie',
+                alerts: [
+                    {% if stats.restitutionEnRetard > 0 %}
+                    {
+                        id: 1,
+                        type: 'warning',
+                        message: '{{ stats.restitutionEnRetard }} restitution(s) en retard nécessitent votre attention'
+                    }
+                    {% endif %}
+                ],
+
+                async refreshData() {
+                    this.refreshing = true;
+                    // Recharger la page pour actualiser les données
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                },
+
+                updateStats() {
+                    // Logique pour mettre à jour les stats selon la période
+                    console.log('Période sélectionnée:', this.selectedPeriod);
+                },
+
+                removeAlert(alertId) {
+                    this.alerts = this.alerts.filter(alert => alert.id !== alertId);
+                }
+            }
+        }
+    </script>
 {% endblock %}

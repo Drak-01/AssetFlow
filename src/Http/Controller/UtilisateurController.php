@@ -12,6 +12,9 @@ use App\Domain\Attribution\Service\listAttribution;
 use App\Domain\Attribution\Service\revokeattribution;
 use App\Domain\Departement\Service\getDepartement;
 use App\Domain\Inventaire\Service\listInventaire;
+use App\Domain\Restitution\DTO\CreateRestitutionDTO;
+use App\Domain\Restitution\Service\CreateRestitutionService;
+use App\Domain\Restitution\Service\listRestitution;
 use App\Domain\User\DTO\CreateDTO;
 use App\Domain\User\Service\createUserService;
 use App\Domain\User\Service\deleteService;
@@ -38,6 +41,8 @@ class UtilisateurController extends AbstractController
         private readonly createAttribution $createAttribution,
         private readonly approuveattribution $approuveattribution,
         private readonly revokeAttribution $revokeAttribution,
+        private readonly CreateRestitutionService $createRestitutionService,
+        private readonly listRestitution   $listRestitution,
     )
     {
     }
@@ -45,6 +50,7 @@ class UtilisateurController extends AbstractController
     #[Route('', name: 'index')]
     public function index(): Response
     {
+        $user = $this->getUser();
         //LIste des utilisateurs
         $users = $this->listUser->list();
 
@@ -60,6 +66,7 @@ class UtilisateurController extends AbstractController
             'total' => count($users),
             'active' => $this->listUser->active(),
             'inactive' => $this->listUser->inactive(),
+            'user' => $user,
         ]);
     }
 
@@ -100,12 +107,37 @@ class UtilisateurController extends AbstractController
 
         return $this->redirectToRoute('utilisateur_index');
     }
-    //--------------
-    #[Route('/restitution', name: 'restitution', methods: ['GET'])]
-    public  function restitution():Response
+    //--------------------- Restitution --------------------------
+    #[Route('/restitution', name: 'restitution', methods: ['GET', 'POST'])]
+    public  function restitution(Request $request):Response
     {
+        //------------------- Les variables pour la restitution ------------
+        $restitutions = $this->listRestitution->lists();
+        $stats = $this->listRestitution->stats();
 
-        return $this->render('utilisateur/restitution.html.twig');
+        //-----------------------------------
+        $dto = new CreateRestitutionDTO();
+        $form = $this->createForm(AutomaticForm::class, $dto);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $this->createRestitutionService->create($dto);
+                $this->addFlash('success', 'Restitution créée avec succès !');
+                return $this->redirectToRoute('utilisateur_restitution');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Erreur lors de la restitution : ' . $e->getMessage());
+            }
+        }
+
+        $user = $this->getUser();
+        return $this->render('utilisateur/restitution.html.twig', [
+            'form' => $form->createView(),
+            'restitutions' => $restitutions,
+            'stats' => $stats,
+            'user' => $user,
+
+        ]);
     }
 
     //----------------------------------------------------
@@ -133,11 +165,13 @@ class UtilisateurController extends AbstractController
             }
         }
 
+        $user = $this->getUser();
         return $this->render('utilisateur/attribution.html.twig', [
             'form' => $form->createView(),
             'actifs' => $actifsAttribues,
             'stats' => $stats,
             'attributions' => $attributions,
+            'user' => $user,
         ]);
     }
 
@@ -185,7 +219,7 @@ class UtilisateurController extends AbstractController
 
         // En attente
         $enAttente = array_filter($attributions, function($attribution) {
-            return $attribution->getStatut() === 'pending';
+            return $attribution->getStatus() === 'pending';
         });
 
         // Actifs disponibles (stock)

@@ -53,10 +53,7 @@
                       'text-white' :
                       'text-blue-300 dark:text-gray-400 group-hover:text-white'"></i>
             <span class="font-medium">Inventaire</span>
-            <span class="ml-auto bg-blue-700 dark:bg-gray-700 text-xs px-2 py-1 rounded-full transition-colors duration-200"
-                  :class="$root.activeSection === 'inventory' ? 'bg-blue-600' : ''">
-                  247
-            </span>
+            
         </a>
 
         <!-- Users -->
@@ -71,10 +68,7 @@
                       'text-white' :
                       'text-blue-300 dark:text-gray-400 group-hover:text-white'"></i>
             <span class="font-medium">Utilisateurs</span>
-            <span class="ml-auto bg-blue-700 dark:bg-gray-700 text-xs px-2 py-1 rounded-full transition-colors duration-200"
-                  :class="$root.activeSection === 'users' ? 'bg-blue-600' : ''">
-                  300
-            </span>
+
         </a>
 
         <!-- Divider -->
@@ -117,37 +111,37 @@
         <div class="border-t border-blue-700 dark:border-gray-700 my-4"></div>
 
         <!-- Reports Section -->
-        <div class="px-3 mb-2">
-            <span class="text-xs text-blue-300 dark:text-gray-400 font-semibold uppercase tracking-wider">Rapports</span>
-        </div>
+{#        <div class="px-3 mb-2">#}
+{#            <span class="text-xs text-blue-300 dark:text-gray-400 font-semibold uppercase tracking-wider">Rapports</span>#}
+{#        </div>#}
 
-        <!-- History -->
-        <a href="#history"
-           class="nav-item flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 group"
-           :class="$root.activeSection === 'history' ?
-                  'bg-blue-700 dark:bg-blue-600 shadow-md' :
-                  'hover:bg-blue-700 dark:hover:bg-gray-700'"
-           @click="$root.setActiveSection('history')">
-            <i class="fas fa-history w-5 transition-colors duration-200"
-               :class="$root.activeSection === 'history' ?
-                      'text-white' :
-                      'text-blue-300 dark:text-gray-400 group-hover:text-white'"></i>
-            <span class="font-medium">Historique</span>
-        </a>
+{#        <!-- History -->#}
+{#        <a href="#history"#}
+{#           class="nav-item flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 group"#}
+{#           :class="$root.activeSection === 'history' ?#}
+{#                  'bg-blue-700 dark:bg-blue-600 shadow-md' :#}
+{#                  'hover:bg-blue-700 dark:hover:bg-gray-700'"#}
+{#           @click="$root.setActiveSection('history')">#}
+{#            <i class="fas fa-history w-5 transition-colors duration-200"#}
+{#               :class="$root.activeSection === 'history' ?#}
+{#                      'text-white' :#}
+{#                      'text-blue-300 dark:text-gray-400 group-hover:text-white'"></i>#}
+{#            <span class="font-medium">Historique</span>#}
+{#        </a>#}
 
-        <!-- Analytics -->
-        <a href="#analytics"
-           class="nav-item flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 group"
-           :class="$root.activeSection === 'analytics' ?
-                  'bg-blue-700 dark:bg-blue-600 shadow-md' :
-                  'hover:bg-blue-700 dark:hover:bg-gray-700'"
-           @click="$root.setActiveSection('analytics')">
-            <i class="fas fa-chart-bar w-5 transition-colors duration-200"
-               :class="$root.activeSection === 'analytics' ?
-                      'text-white' :
-                      'text-blue-300 dark:text-gray-400 group-hover:text-white'"></i>
-            <span class="font-medium">Analytiques</span>
-        </a>
+{#        <!-- Analytics -->#}
+{#        <a href="#analytics"#}
+{#           class="nav-item flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 group"#}
+{#           :class="$root.activeSection === 'analytics' ?#}
+{#                  'bg-blue-700 dark:bg-blue-600 shadow-md' :#}
+{#                  'hover:bg-blue-700 dark:hover:bg-gray-700'"#}
+{#           @click="$root.setActiveSection('analytics')">#}
+{#            <i class="fas fa-chart-bar w-5 transition-colors duration-200"#}
+{#               :class="$root.activeSection === 'analytics' ?#}
+{#                      'text-white' :#}
+{#                      'text-blue-300 dark:text-gray-400 group-hover:text-white'"></i>#}
+{#            <span class="font-medium">Analytiques</span>#}
+{#        </a>#}
 
         <!-- Settings -->
         <a href="#settings"

@@ -1,40 +1,39 @@
 <!-- ========================================
      HEADER COMPONENT WITH ALPINE.JS & DARK MODE
      ======================================== -->
-<header class="fixed top-0 right-0 left-0 lg:left-64 bg-white dark:bg-gray-800 shadow-md z-20 transition-colors duration-300"
-        x-data="header()">
+<header
+    class="fixed top-0 right-0 left-0 lg:left-64 bg-white dark:bg-gray-800 shadow-md z-20 transition-colors duration-300"
+    x-data="header()">
     <div class="px-4 sm:px-6 lg:px-8 py-4">
         <div class="flex justify-between items-center">
 
             <!-- Left Section: Mobile Menu + Page Title -->
             <div class="flex items-center space-x-4">
                 <!-- Mobile Menu Button -->
-                <button class="lg:hidden text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                        @click="toggleSidebar()">
+                <button
+                    class="lg:hidden text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                    @click="toggleSidebar()">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
 
                 <!-- Page Title -->
                 <div>
-                    <h1 class="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white" id="page-title">Tableau de Bord</h1>
-                    <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5" id="page-subtitle">Vue d'ensemble de vos actifs IT</p>
+                    <h1 class="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white" id="page-title">Tableau de
+                        Bord</h1>
+                    <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5" id="page-subtitle">Vue
+                        d'ensemble de vos actifs IT</p>
                 </div>
             </div>
 
             <!-- Right Section: Actions & Notifications -->
             <div class="flex items-center space-x-2 sm:space-x-4">
 
-                <!-- Search Button (Desktop) -->
-                <button class="hidden sm:flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-lg transition">
-                    <i class="fas fa-search"></i>
-                    <span class="hidden md:inline text-sm">Rechercher</span>
-                </button>
-
                 <!-- Dark Mode Toggle -->
                 <div class="relative">
-                    <button class="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition"
-                            @click="toggleDarkMode()"
-                            x-tooltip="'Toggle dark mode'">
+                    <button
+                        class="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition"
+                        @click="toggleDarkMode()"
+                        x-tooltip="'Toggle dark mode'">
                         <i class="fas fa-moon text-xl" x-show="!darkMode"></i>
                         <i class="fas fa-sun text-xl" x-show="darkMode"></i>
                     </button>
@@ -42,36 +41,43 @@
 
                 <!-- Notifications -->
                 <div class="relative">
-                    <button class="relative p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition"
-                            @click="toggleNotifications()"
-                            x-tooltip="'Notifications'">
+                    <button
+                        class="relative p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition"
+                        @click="toggleNotifications()"
+                        x-tooltip="'Notifications'">
                         <i class="fas fa-bell text-xl"></i>
                         <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center"
-                              x-text="notificationCount"></span>
+                        <span
+                            class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center"
+                            x-text="unreadCount"></span>
                     </button>
 
                     <!-- Notifications Dropdown -->
-                    <div class="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-50 transition-all duration-300"
-                         x-show="showNotifications"
-                         x-transition:enter="transition ease-out duration-300"
-                         x-transition:enter-start="opacity-0 transform scale-95"
-                         x-transition:enter-end="opacity-100 transform scale-100"
-                         x-transition:leave="transition ease-in duration-200"
-                         x-transition:leave-start="opacity-100 transform scale-100"
-                         x-transition:leave-end="opacity-0 transform scale-95"
-                         @click.outside="showNotifications = false">
+                    <div
+                        class="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-50 transition-all duration-300"
+                        x-show="showNotifications"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        @click.outside="showNotifications = false">
                         <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
                             <div class="flex justify-between items-center">
-                                <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Notifications</p>
-                                <button class="text-xs text-blue-600 dark:text-blue-400 hover:underline" @click="markAllAsRead()">Tout marquer comme lu</button>
+                                <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
+                                    Notifications</p>
+                                <button class="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                                        @click="markAllAsRead()">Tout marquer comme lu
+                                </button>
                             </div>
                         </div>
 
                         <!-- Notification Items -->
                         <template x-for="notification in notifications" :key="notification.id">
-                            <div class="flex items-start space-x-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition border-b border-gray-100 dark:border-gray-600 last:border-b-0"
-                                 :class="{ 'bg-blue-50 dark:bg-gray-700': !notification.read }">
+                            <div
+                                class="flex items-start space-x-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition border-b border-gray-100 dark:border-gray-600 last:border-b-0"
+                                :class="{ 'bg-blue-50 dark:bg-gray-700': !notification.read }">
                                 <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
                                      :class="notification.type === 'warning' ? 'bg-yellow-100 dark:bg-yellow-900' :
                                              notification.type === 'error' ? 'bg-red-100 dark:bg-red-900' :
@@ -82,108 +88,99 @@
                                                'fa-info-circle text-blue-600 dark:text-blue-400'"></i>
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-gray-800 dark:text-white" x-text="notification.title"></p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" x-text="notification.message"></p>
-                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1" x-text="notification.time"></p>
+                                    <p class="text-sm font-medium text-gray-800 dark:text-white"
+                                       x-text="notification.title"></p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1"
+                                       x-text="notification.message"></p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1"
+                                       x-text="notification.time"></p>
+
+                                    <!-- Notification Actions -->
+                                    <div class="flex space-x-2 mt-2" x-show="notification.actions">
+                                        <template x-for="action in notification.actions" :key="action.action">
+                                            <button
+                                                class="text-xs px-2 py-1 rounded transition"
+                                                :class="action.primary ?
+                                                    'bg-blue-600 text-white hover:bg-blue-700' :
+                                                    'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500'"
+                                                @click="handleNotificationAction(notification.id, action.action)">
+                                                <span x-text="action.label"></span>
+                                            </button>
+                                        </template>
+                                    </div>
                                 </div>
+                                <button
+                                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition"
+                                    @click="removeNotification(notification.id)">
+                                    <i class="fas fa-times text-xs"></i>
+                                </button>
                             </div>
                         </template>
 
-                        <div class="px-4 py-2 border-t border-gray-200 dark:border-gray-700">
-                            <a href="#" class="block text-center text-sm text-blue-600 dark:text-blue-400 hover:underline font-medium">
-                                Voir toutes les notifications
-                            </a>
+                        <!-- Empty State -->
+                        <div x-show="notifications.length === 0" class="px-4 py-8 text-center">
+                            <i class="fas fa-bell-slash text-gray-400 text-2xl mb-2"></i>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Aucune notification</p>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Quick Actions Dropdown -->
-                <div class="relative hidden sm:block">
-                    <button class="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition"
-                            @click="toggleQuickActions()"
-                            x-tooltip="'Actions rapides'">
-                        <i class="fas fa-th text-xl"></i>
-                    </button>
-
-                    <!-- Quick Actions Dropdown Menu -->
-                    <div class="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-50 transition-all duration-300"
-                         x-show="showQuickActions"
-                         x-transition:enter="transition ease-out duration-300"
-                         x-transition:enter-start="opacity-0 transform scale-95"
-                         x-transition:enter-end="opacity-100 transform scale-100"
-                         x-transition:leave="transition ease-in duration-200"
-                         x-transition:leave-start="opacity-100 transform scale-100"
-                         x-transition:leave-end="opacity-0 transform scale-95"
-                         @click.outside="showQuickActions = false">
-                        <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Actions Rapides</p>
+                        <div class="px-4 py-2 border-t border-gray-200 dark:border-gray-700" x-show="notifications.length > 0">
+                            <div class="flex justify-between items-center">
+                                <a href="#"
+                                   class="text-sm text-blue-600 dark:text-blue-400 hover:underline font-medium">
+                                    Voir toutes les notifications
+                                </a>
+                                <button
+                                    class="text-sm text-red-600 dark:text-red-400 hover:underline font-medium"
+                                    @click="clearAllNotifications()">
+                                    Tout effacer
+                                </button>
+                            </div>
                         </div>
-                        <a href="#" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                            <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                                <i class="fas fa-plus text-blue-600 dark:text-blue-400"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white">Nouvel Actif</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Ajouter à l'inventaire</p>
-                            </div>
-                        </a>
-                        <a href="#" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                            <div class="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
-                                <i class="fas fa-user-plus text-green-600 dark:text-green-400"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white">Nouvel Utilisateur</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Ajouter un employé</p>
-                            </div>
-                        </a>
-                        <a href="#" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                            <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
-                                <i class="fas fa-file-download text-purple-600 dark:text-purple-400"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-800 dark:text-white">Exporter Données</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Format Excel/PDF</p>
-                            </div>
-                        </a>
                     </div>
                 </div>
 
                 <!-- User Menu -->
                 <div class="relative">
-                    <button class="flex items-center space-x-2 p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition"
-                            @click="toggleUserMenu()">
-                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
+                    <button
+                        class="flex items-center space-x-2 p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition"
+                        @click="toggleUserMenu()">
+                        <div
+                            class="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
                             AD
                         </div>
-                        <span class="hidden sm:inline text-sm font-medium">Admin DSI</span>
+                        <span class="hidden sm:inline text-sm font-medium">Admin</span>
                         <i class="fas fa-chevron-down text-xs transition-transform duration-200"
                            :class="{ 'rotate-180': showUserMenu }"></i>
                     </button>
 
                     <!-- User Dropdown Menu -->
-                    <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-50 transition-all duration-300"
-                         x-show="showUserMenu"
-                         x-transition:enter="transition ease-out duration-300"
-                         x-transition:enter-start="opacity-0 transform scale-95"
-                         x-transition:enter-end="opacity-100 transform scale-100"
-                         x-transition:leave="transition ease-in duration-200"
-                         x-transition:leave-start="opacity-100 transform scale-100"
-                         x-transition:leave-end="opacity-0 transform scale-95"
-                         @click.outside="showUserMenu = false">
+                    <div
+                        class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-50 transition-all duration-300"
+                        x-show="showUserMenu"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        @click.outside="showUserMenu = false">
                         <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                            <p class="text-sm font-medium text-gray-800 dark:text-white">Admin DSI</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">admin@dsi.com</p>
+                            <p class="text-sm font-medium text-gray-800 dark:text-white"> Admin</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ user.email }}</p>
                         </div>
-                        <a href="#" class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                        <a href="#"
+                           class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                             <i class="fas fa-user w-4"></i>
                             <span>Mon Profil</span>
                         </a>
-                        <a href="#" class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                        <a href="#"
+                           class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                             <i class="fas fa-cog w-4"></i>
                             <span>Paramètres</span>
                         </a>
                         <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
-                        <a href="#" class="flex items-center space-x-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 transition">
+                        <a href="{{ path('app_logout') }}"
+                           class="flex items-center space-x-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 transition">
                             <i class="fas fa-sign-out-alt w-4"></i>
                             <span>Déconnexion</span>
                         </a>
@@ -211,40 +208,111 @@
     // Alpine.js Component for Header
     function header() {
         return {
+            // State
+            darkMode: localStorage.getItem('darkMode') === 'true',
             showNotifications: false,
-            showQuickActions: false,
             showUserMenu: false,
-            notificationCount: 3,
-            notifications: [
-                {
-                    id: 1,
-                    title: 'Nouvelle attribution',
-                    message: 'MacBook Pro attribué à Sophie Martin',
-                    time: 'Il y a 2h',
-                    type: 'info',
-                    read: false
-                },
-                {
-                    id: 2,
-                    title: 'Licence expirante',
-                    message: 'Licence Adobe Creative Cloud expire dans 7 jours',
-                    time: 'Il y a 5h',
-                    type: 'warning',
-                    read: false
-                },
-                {
-                    id: 3,
-                    title: 'Actif en réparation',
-                    message: 'iPhone 15 Pro envoyé en réparation',
-                    time: 'Hier',
-                    type: 'error',
-                    read: true
-                }
-            ],
+            notifications: [],
+            loading: false,
 
-            init() {
-                // Apply dark mode on init
+            // Computed
+            get unreadCount() {
+                return this.notifications.filter(n => !n.read).length;
+            },
+
+            get notificationCount() {
+                return this.notifications.length;
+            },
+
+            // Lifecycle
+            async init() {
                 this.applyDarkMode();
+                await this.loadNotifications();
+
+                // Recharger les notifications toutes les 30 secondes
+                setInterval(() => {
+                    this.loadNotifications();
+                }, 30000);
+            },
+
+            // Methods
+            async loadNotifications() {
+                try {
+                    this.loading = true;
+                    const response = await fetch('/api/notifications/recent');
+                    const data = await response.json();
+
+                    if (data.notifications) {
+                        this.notifications = data.notifications.map(notification => ({
+                            ...notification,
+                            time: this.formatTime(notification.created_at)
+                        }));
+                    }
+                } catch (error) {
+                    console.error('Erreur chargement notifications:', error);
+                } finally {
+                    this.loading = false;
+                }
+            },
+
+            async markAsRead(notificationId) {
+                try {
+                    const response = await fetch(`/api/notifications/mark-read/${notificationId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Mettre à jour localement
+                        const notification = this.notifications.find(n => n.id === notificationId);
+                        if (notification) {
+                            notification.read = true;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Erreur marquer comme lu:', error);
+                }
+            },
+
+            async markAllAsRead() {
+                try {
+                    const response = await fetch('/api/notifications/mark-all-read', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Mettre à jour localement
+                        this.notifications.forEach(notification => {
+                            notification.read = true;
+                        });
+                    }
+                } catch (error) {
+                    console.error('Erreur tout marquer comme lu:', error);
+                }
+            },
+
+            formatTime(dateString) {
+                const date = new Date(dateString);
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMs / 3600000);
+                const diffDays = Math.floor(diffMs / 86400000);
+
+                if (diffMins < 1) return 'À l\'instant';
+                if (diffMins < 60) return `Il y a ${diffMins} min`;
+                if (diffHours < 24) return `Il y a ${diffHours} h`;
+                if (diffDays === 1) return 'Hier';
+                return `Il y a ${diffDays} jours`;
             },
 
             toggleDarkMode() {
@@ -263,44 +331,38 @@
 
             toggleNotifications() {
                 this.showNotifications = !this.showNotifications;
-                this.showQuickActions = false;
-                this.showUserMenu = false;
-            },
-
-            toggleQuickActions() {
-                this.showQuickActions = !this.showQuickActions;
-                this.showNotifications = false;
                 this.showUserMenu = false;
             },
 
             toggleUserMenu() {
                 this.showUserMenu = !this.showUserMenu;
                 this.showNotifications = false;
-                this.showQuickActions = false;
             },
 
-            markAllAsRead() {
-                this.notifications.forEach(notification => notification.read = true);
-                this.notificationCount = 0;
-                this.showNotifications = false;
+            async handleNotificationAction(notificationId, action) {
+                await this.markAsRead(notificationId);
+
+                switch (action) {
+                    case 'process':
+                        window.location.href = "/attributions";
+                        break;
+                    case 'renew':
+                        this.openRenewalModal(notificationId);
+                        break;
+                    case 'ignore':
+                        break;
+                }
+            },
+
+            openRenewalModal(notificationId) {
+                console.log(`Ouverture modal renouvellement pour ${notificationId}`);
             },
 
             toggleSidebar() {
-                // This function should be defined in your main Alpine.js component
                 if (typeof window.toggleSidebar === 'function') {
                     window.toggleSidebar();
                 }
             }
-        }
+        };
     }
-
-    // Initialize tooltips for Alpine.js
-    document.addEventListener('alpine:init', () => {
-        Alpine.directive('tooltip', (el, { expression }) => {
-            const tooltip = expression || el.getAttribute('x-tooltip');
-            if (tooltip) {
-                el.setAttribute('title', tooltip.replace(/'/g, ''));
-            }
-        });
-    });
 </script>

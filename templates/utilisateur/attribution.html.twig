@@ -166,6 +166,20 @@
                         </div>
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            {{ form_label(form.quantite) }}
+                        </label>
+                        {{ form_widget(form.quantite, {
+                            'attr': {
+                                'class': "block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            }
+                        }) }}
+                        <div class="text-red-600 text-xs mt-1">
+                            {{ form_errors(form.quantite) }}
+                        </div>
+                    </div>
+
                     <div class="mt-4">
                         <label class="block text-sm font-medium text-gray-700 mb-1">
                             {{ form_label(form.dateAttribution) }}
@@ -225,12 +239,27 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Utilisateur</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actif</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assigné par</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Utilisateur
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actif
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Quantité
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Date
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Assigné par
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                        </th>
                     </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -239,20 +268,35 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
-                                        <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                                        <div
+                                            class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
                                             {{ attribution.utilisateur.firstname.initials|default('??') }}
                                         </div>
                                     </div>
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">{{ attribution.utilisateur.firstname|default('Utilisateur inconnu') }}</div>
-                                        <div class="text-sm text-gray-500">{{ attribution.utilisateur.email|default('Non spécifié') }}</div>
+                                        <div
+                                            class="text-sm font-medium text-gray-900">{{ attribution.utilisateur.firstname|default('Utilisateur inconnu') }}</div>
+                                        <div
+                                            class="text-sm text-gray-500">{{ attribution.utilisateur.email|default('Non spécifié') }}</div>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900">{{ attribution.actif.name|default('Actif inconnu') }}</div>
+                                <div
+                                    class="text-sm font-medium text-gray-900">{{ attribution.actif.name|default('Actif inconnu') }}</div>
                                 <div class="text-sm text-gray-500">{{ attribution.actif.serie|default('N/A') }}</div>
                             </td>
+
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-500 capitalize">
+                                    {% if attribution.quantite > 0 %}
+                                        {{ attribution.quantite }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </div>
+                            </td>
+
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm text-gray-900">
                                     {% if attribution.dateAttribution %}
@@ -284,47 +328,34 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                        {% if attribution.statut == 'active' %}bg-green-100 text-green-800
-                                        {% elseif attribution.statut == 'pending' %}bg-yellow-100 text-yellow-800
+                                        {% if attribution.status == 'active' %}bg-green-100 text-green-800
+                                        {% elseif attribution.status == 'pending' %}bg-yellow-100 text-yellow-800
                                         {% else %}bg-gray-100 text-gray-800{% endif %}">
                                         <i class="fas
-                                            {% if attribution.statut == 'active' %}fa-check-circle
-                                            {% elseif attribution.statut == 'pending' %}fa-clock
+                                            {% if attribution.status == 'active' %}fa-check-circle
+                                            {% elseif attribution.status == 'pending' %}fa-clock
                                             {% else %}fa-times-circle{% endif %} mr-1">
                                         </i>
-                                        {{ attribution.statut|default('inconnu')|capitalize }}
+                                        {{ attribution.status|default('inconnu')|capitalize }}
                                     </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ attribution.assigneur.nom|default('Système') }}</div>
-                                <div class="text-sm text-gray-500">{{ attribution.assigneur.role|default('Auto') }}</div>
+                                <div
+                                    class="text-sm text-gray-900">{{ attribution.assigneur.nom|default('Système') }}</div>
+                                <div
+                                    class="text-sm text-gray-500">{{ attribution.assigneur.role|default('Auto') }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex justify-end space-x-2">
                                     <!-- Bouton Restituer - visible seulement pour les attributions actives -->
-                                    {% if attribution.statut == 'attribue' or attribution.statut == 'pending' %}
-                                        <form action="{{ path('utilisateur_attribution_revoke', {'id': attribution.id}) }}" method="post" class="inline">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('revoke_' ~ attribution.id) }}">
-                                            <button type="submit"
-                                                    onclick="return confirm('Êtes-vous sûr de vouloir restituer cet actif ?');"
-                                                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
-                                                <i class="fas fa-undo mr-1.5"></i>
-                                                Restituer
-                                            </button>
-                                        </form>
-                                    {% endif %}
-
-{#                                    <!-- Bouton Voir détails -->#}
-{#                                    <a href="#" class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">#}
-{#                                        <i class="fas fa-eye mr-1.5"></i>#}
-{#                                        Détails#}
-{#                                    </a>#}
-
 
                                     <!-- Bouton Approuver - visible seulement pour les attributions en attente -->
-                                    {% if attribution.statut == 'pending' %}
-                                        <form action="{{ path('utilisateur_attribution_approve', {'id': attribution.id}) }}" method="post" class="inline">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('approve_' ~ attribution.id) }}">
+                                    {% if attribution.status == 'pending' %}
+                                        <form
+                                            action="{{ path('utilisateur_attribution_approve', {'id': attribution.id}) }}"
+                                            method="post" class="inline">
+                                            <input type="hidden" name="_token"
+                                                   value="{{ csrf_token('approve_' ~ attribution.id) }}">
                                             <button type="submit"
                                                     onclick="return confirm('Êtes-vous sûr de vouloir approuver cette attribution ?');"
                                                     class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
@@ -332,6 +363,8 @@
                                                 Approuver
                                             </button>
                                         </form>
+                                    {% else %}
+                                        ---
                                     {% endif %}
                                 </div>
                             </td>

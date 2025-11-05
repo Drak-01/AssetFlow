@@ -6,18 +6,54 @@ namespace App\DataFixtures;
 use App\Domain\Departement\Departement;
 use App\Domain\Inventaire\Actifs;
 use App\Domain\User\Utilisateur;
-use Couchbase\User;
+use App\Domain\User\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    public function __construct(
+        private readonly UserPasswordHasherInterface $passwordHasher
+    ) {
+    }
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR'); // Déplacer Faker ici
 
+// 1. Création des utilisateurs
+        $users = [
+            [
+                'email' => 'admin@assetflow.com',
+                'password' => 'admin123',
+                'roles' => ['ROLE_ADMIN']
+            ],
+            [
+                'email' => 'user@assetflow.com',
+                'password' => 'user123',
+                'roles' => ['ROLE_USER']
+            ],
+            [
+                'email' => 'dsi@assetflow.com',
+                'password' => 'dsi123',
+                'roles' => ['ROLE_ADMIN', 'ROLE_DSI']
+            ]
+        ];
 
+        foreach ($users as $userData) {
+            $user = new User();
+            $user->setEmail($userData['email']);
+            $user->setRoles($userData['roles']);
+            $user->setPassword(
+                $this->passwordHasher->hashPassword($user, $userData['password'])
+            );
+
+            $manager->persist($user);
+            $this->addReference('user_' . explode('@', $userData['email'])[0], $user);
+        }
+
+        $manager->flush();
 
         $departments = [
             [
@@ -125,7 +161,7 @@ class AppFixtures extends Fixture
         ];
 
         // Statuts possibles
-        $statuts = ['maintenance', 'stock', 'attribue'];
+        $statuts = ['stock'];
 
         // Génération de 12 actifs
         for ($i = 1; $i <= 12; $i++) {
@@ -167,6 +203,9 @@ class AppFixtures extends Fixture
         $actif->setModele($modele);
         $actif->setStatus($faker->randomElement($statuts));
         $actif->setCategory($category);
+        // AJOUT DE LA LOGIQUE TYPE ET QUANTITE
+        $actif->setType('materiel');
+        $actif->setQuantite(null);
         $actif->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-2 years', '-1 month')));
         $actif->setUpdatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 month', 'now')));
     }
@@ -187,14 +226,16 @@ class AppFixtures extends Fixture
 
         $actif->setName($logiciel['name']);
         $actif->setSlug($this->generateSlug($actif->getName()));
-        $actif->setSerie('LIC' . $faker->unique()->numerify('#########'));
+        $actif->setSerie(null);
         $actif->setModele('Édition Standard');
         $actif->setStatus($faker->randomElement($statuts));
         $actif->setCategory($logiciel['category']);
+        // AJOUT DE LA LOGIQUE TYPE ET QUANTITE
+        $actif->setType('logiciel');
+        $actif->setQuantite($faker->numberBetween(5, 50));
         $actif->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 year', 'now')));
         $actif->setUpdatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 month', 'now')));
     }
-
 
     private function generateSlug(string $name): string
     {

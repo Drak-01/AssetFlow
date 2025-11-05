@@ -33,9 +33,21 @@ class createAttribution
         if (!$user || !$actif) {
             throw new \RuntimeException('Utilisateur or actif non trouvé');
         }
+
+        if($actif->getType() == 'logiciel'){
+            $qte = $actif->getQuantite() - $dto->quantite;
+            if($qte < 0){
+                throw new \RuntimeException('La quantité insuffisante');
+            }
+            $attribution->setQuantite($qte);
+
+        }
+
+        $attribution->setQuantite($dto->quantite);
+        $attribution->setType($actif->getType());
         $attribution->setactif($actif);
         $attribution->setUtilisateur($user);
-        $attribution->setStatut('pending');
+        $attribution->setStatus('pending');
 
 //        if (is_array($dto->actifs)) {
 //            foreach ($dto->actifs as $actifId) {
@@ -51,9 +63,12 @@ class createAttribution
 //                $attribution->setActif($actif);
 //            }
 //        }
-        // Définir les autres propriétés
-        $attribution->setDateAttribution($dto->dateAttribution ?? new \DateTimeImmutable());
 
+        $dateAttribution = $dto->dateAttribution;
+        if ($dateAttribution instanceof \DateTime) {
+            $dateAttribution = \DateTimeImmutable::createFromMutable($dateAttribution);
+        }
+        $attribution->setDateAttribution($dateAttribution);
 
         $attribution->setNotes($dto->notes);
 //        $attribution->setStatut('active');
