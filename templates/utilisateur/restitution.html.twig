@@ -1,0 +1,643 @@
+{% extends 'partials/layout.html.twig' %}
+
+{% block content %}
+    <!-- ========================= Contenu principal ======================== -->
+    <div class="max-w-7xl mx-auto">
+        <!-- En-tête de page -->
+        <div class="md:flex md:items-center md:justify-between mb-6">
+            <div class="flex-1 min-w-0">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                    <i class="fas fa-undo-alt mr-3 text-blue-600"></i>
+                    Restitution des Actifs
+                </h2>
+                <p class="mt-1 text-sm text-gray-500">
+                    Gérez les retours d'actifs et les processus de restitution
+                </p>
+            </div>
+            <div class="mt-4 flex space-x-3 md:mt-0 md:ml-4">
+                <button type="button"
+                        class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <i class="fas fa-file-export mr-2"></i>
+                    Exporter
+                </button>
+                <button type="button"
+                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <i class="fas fa-undo mr-2"></i>
+                    Nouvelle Restitution
+                </button>
+            </div>
+        </div>
+
+        <!-- Statistiques rapides -->
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-6">
+            <!-- Restitutions ce mois -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-calendar-minus text-3xl text-blue-500"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">
+                                    Ce Mois
+                                </dt>
+                                <dd class="text-lg font-semibold text-gray-900">
+                                    8
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- En attente de traitement -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-clock text-3xl text-yellow-500"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">
+                                    En Attente
+                                </dt>
+                                <dd class="text-lg font-semibold text-gray-900">
+                                    3
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Restitutions en retard -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-triangle text-3xl text-red-500"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">
+                                    En Retard
+                                </dt>
+                                <dd class="text-lg font-semibold text-gray-900">
+                                    2
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Taux de restitution -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-percentage text-3xl text-green-500"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">
+                                    Taux de Retour
+                                </dt>
+                                <dd class="text-lg font-semibold text-gray-900">
+                                    95%
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulaire de restitution rapide -->
+        <div class="bg-white shadow rounded-lg mb-6">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                    <i class="fas fa-bolt mr-2 text-yellow-500"></i>
+                    Restitution Rapide
+                </h3>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <!-- Sélection actif à restituer -->
+                    <div>
+                        <label for="assetToReturn" class="block text-sm font-medium text-gray-700 mb-1">Actif à Restituer</label>
+                        <select id="assetToReturn"
+                                class="block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="">Sélectionner un actif attribué...</option>
+                            <option value="1">Dell XPS 13 (IT-001) - Marie Dubois</option>
+                            <option value="2">iPhone 14 Pro (IT-045) - Pierre Lambert</option>
+                            <option value="3">MacBook Pro 16" (IT-023) - Sophie Martin</option>
+                            <option value="4">ThinkPad T14 (IT-078) - Thomas Bernard</option>
+                        </select>
+                    </div>
+
+                    <!-- Date de restitution -->
+                    <div>
+                        <label for="returnDate" class="block text-sm font-medium text-gray-700 mb-1">Date de Restitution</label>
+                        <input type="date" id="returnDate"
+                               class="block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                               value="{{ 'now'|date('Y-m-d') }}">
+                    </div>
+                </div>
+
+                <!-- État de l'actif -->
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">État de l'Actif</label>
+                    <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                        <label class="relative flex items-start">
+                            <div class="flex items-center h-5">
+                                <input type="radio" name="assetCondition" value="excellent" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <span class="text-green-600 font-medium">Excellent</span>
+                            </div>
+                        </label>
+                        <label class="relative flex items-start">
+                            <div class="flex items-center h-5">
+                                <input type="radio" name="assetCondition" value="good" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <span class="text-blue-600 font-medium">Bon</span>
+                            </div>
+                        </label>
+                        <label class="relative flex items-start">
+                            <div class="flex items-center h-5">
+                                <input type="radio" name="assetCondition" value="fair" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <span class="text-yellow-600 font-medium">Correct</span>
+                            </div>
+                        </label>
+                        <label class="relative flex items-start">
+                            <div class="flex items-center h-5">
+                                <input type="radio" name="assetCondition" value="poor" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <span class="text-red-600 font-medium">Mauvais</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Notes et observations -->
+                <div class="mt-4">
+                    <label for="returnNotes" class="block text-sm font-medium text-gray-700 mb-1">Observations</label>
+                    <textarea id="returnNotes" rows="3"
+                              class="block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                              placeholder="Décrivez l'état de l'actif, les éventuels dommages, accessoires manquants..."></textarea>
+                </div>
+
+                <!-- Checklist de vérification -->
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Checklist de Vérification</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                            <span class="ml-2 text-sm text-gray-700">Actif nettoyé et en état de fonctionnement</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                            <span class="ml-2 text-sm text-gray-700">Tous les accessoires présents (chargeur, câbles, etc.)</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                            <span class="ml-2 text-sm text-gray-700">Données utilisateur effacées</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                            <span class="ml-2 text-sm text-gray-700">Licences logicielles récupérées</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button"
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-times mr-2"></i>
+                        Annuler
+                    </button>
+                    <button type="button"
+                            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-check mr-2"></i>
+                        Confirmer la Restitution
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barre de filtres -->
+        <div class="bg-white shadow rounded-lg mb-6">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                    <!-- Recherche -->
+                    <div class="sm:col-span-2">
+                        <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Recherche</label>
+                        <div class="relative rounded-md shadow-sm">
+                            <input type="text" id="search"
+                                   class="block w-full pr-10 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                   placeholder="Utilisateur, actif, numéro de série...">
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filtre statut -->
+                    <div>
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+                        <select id="status"
+                                class="block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="">Tous les statuts</option>
+                            <option value="pending">En attente</option>
+                            <option value="completed">Terminé</option>
+                            <option value="cancelled">Annulé</option>
+                            <option value="overdue">En retard</option>
+                        </select>
+                    </div>
+
+                    <!-- Filtre période -->
+                    <div>
+                        <label for="period" class="block text-sm font-medium text-gray-700 mb-1">Période</label>
+                        <select id="period"
+                                class="block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="">Toute période</option>
+                            <option value="week">Cette semaine</option>
+                            <option value="month">Ce mois</option>
+                            <option value="quarter">Ce trimestre</option>
+                            <option value="year">Cette année</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tableau des restitutions -->
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Historique des Restitutions
+                </h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                    Liste des actifs restitués et en attente de restitution
+                </p>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Utilisateur
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actif Restitué
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Date Attribution
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Date Restitution
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            État
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                    <!-- Restitution 1 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                                        MD
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        Marie Dubois
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        IT - Développeuse
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-8 w-8">
+                                    <div class="h-8 w-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                                        <i class="fas fa-laptop text-blue-600 text-sm"></i>
+                                    </div>
+                                </div>
+                                <div class="ml-3">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        Dell XPS 13
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        IT-001 • SN-DLXPS-2023-001
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">15/01/2023</div>
+                            <div class="text-sm text-gray-500">1 an</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">15/01/2024</div>
+                            <div class="text-sm text-gray-500">Aujourd'hui</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex flex-col space-y-1">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <i class="fas fa-check-circle mr-1"></i>
+                                    Terminée
+                                </span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    Excellent
+                                </span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button class="text-blue-600 hover:text-blue-900" title="Voir détails">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-green-600 hover:text-green-900" title="Télécharger PV">
+                                    <i class="fas fa-file-pdf"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Restitution 2 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <div class="h-10 w-10 rounded-full bg-green-500 flex items-center justify-center text-white font-bold">
+                                        PL
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        Pierre Lambert
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        Commercial
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-8 w-8">
+                                    <div class="h-8 w-8 rounded-lg bg-green-100 flex items-center justify-center">
+                                        <i class="fas fa-mobile-alt text-green-600 text-sm"></i>
+                                    </div>
+                                </div>
+                                <div class="ml-3">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        iPhone 14 Pro
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        IT-045 • SN-IP14P-2023-045
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">10/01/2023</div>
+                            <div class="text-sm text-gray-500">1 an</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">10/01/2024</div>
+                            <div class="text-sm text-gray-500">Il y a 5 jours</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex flex-col space-y-1">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <i class="fas fa-check-circle mr-1"></i>
+                                    Terminée
+                                </span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    Correct
+                                </span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button class="text-blue-600 hover:text-blue-900" title="Voir détails">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-green-600 hover:text-green-900" title="Télécharger PV">
+                                    <i class="fas fa-file-pdf"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Restitution 3 - En attente -->
+                    <tr class="hover:bg-gray-50 bg-yellow-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <div class="h-10 w-10 rounded-full bg-yellow-500 flex items-center justify-center text-white font-bold">
+                                        SM
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        Sophie Martin
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        Marketing
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-8 w-8">
+                                    <div class="h-8 w-8 rounded-lg bg-yellow-100 flex items-center justify-center">
+                                        <i class="fas fa-laptop text-yellow-600 text-sm"></i>
+                                    </div>
+                                </div>
+                                <div class="ml-3">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        MacBook Pro 16"
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        IT-023 • SN-MBP16-2023-023
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">08/01/2023</div>
+                            <div class="text-sm text-gray-500">1 an</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">15/01/2024</div>
+                            <div class="text-sm text-red-500 font-medium">En retard</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex flex-col space-y-1">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    <i class="fas fa-clock mr-1"></i>
+                                    En Attente
+                                </span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    <i class="fas fa-exclamation-triangle mr-1"></i>
+                                    Rappel envoyé
+                                </span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button class="text-blue-600 hover:text-blue-900" title="Voir détails">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-green-600 hover:text-green-900" title="Envoyer rappel">
+                                    <i class="fas fa-bell"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900" title="Marquer comme perdu">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Restitution 4 - Planifiée -->
+                    <tr class="hover:bg-gray-50 bg-blue-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <div class="h-10 w-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold">
+                                        TB
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        Thomas Bernard
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        Finance
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-8 w-8">
+                                    <div class="h-8 w-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                                        <i class="fas fa-laptop text-blue-600 text-sm"></i>
+                                    </div>
+                                </div>
+                                <div class="ml-3">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        ThinkPad T14
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        IT-078 • SN-LTPT14-2022-078
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">05/01/2023</div>
+                            <div class="text-sm text-gray-500">1 an</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">31/01/2024</div>
+                            <div class="text-sm text-blue-500">Planifiée</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex flex-col space-y-1">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    <i class="fas fa-calendar-check mr-1"></i>
+                                    Planifiée
+                                </span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                    À venir
+                                </span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button class="text-blue-600 hover:text-blue-900" title="Voir détails">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-green-600 hover:text-green-900" title="Traiter maintenant">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <button class="text-yellow-600 hover:text-yellow-900" title="Reprogrammer">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                    <div>
+                        <p class="text-sm text-gray-700">
+                            Affichage de
+                            <span class="font-medium">1</span>
+                            à
+                            <span class="font-medium">4</span>
+                            sur
+                            <span class="font-medium">28</span>
+                            résultats
+                        </p>
+                    </div>
+                    <div>
+                        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                            <a href="#"
+                               class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                <span class="sr-only">Précédent</span>
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                            <a href="#"
+                               class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                1
+                            </a>
+                            <a href="#"
+                               class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                2
+                            </a>
+                            <a href="#"
+                               class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                3
+                            </a>
+                            <a href="#"
+                               class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                <span class="sr-only">Suivant</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

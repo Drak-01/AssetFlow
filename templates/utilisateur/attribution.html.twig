@@ -1,0 +1,351 @@
+{% extends 'partials/layout.html.twig' %}
+
+{% block content %}
+    <div class="max-w-7xl mx-auto">
+
+        <!-- Messages flash -->
+        {% for message in app.flashes('success') %}
+            <div class="mb-4 rounded-md bg-green-50 p-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-check-circle text-green-400"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-green-800">{{ message }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <div class="mb-4 rounded-md bg-red-50 p-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-circle text-red-400"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-red-800">{{ message }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <!-- En-tête de page -->
+        <div class="md:flex md:items-center md:justify-between mb-6">
+            <div class="flex-1 min-w-0">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                    <i class="fas fa-handshake mr-3 text-blue-600"></i>
+                    Attribution des Actifs
+                </h2>
+                <p class="mt-1 text-sm text-gray-500">
+                    Attribuez des actifs IT aux employés et gérez les assignations
+                </p>
+            </div>
+        </div>
+
+        <!-- Statistiques rapides -->
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-6">
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-calendar-check text-3xl text-blue-500"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Ce Mois</dt>
+                                <dd class="text-lg font-semibold text-gray-900">{{ stats.ceMois ?? 0 }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-clock text-3xl text-yellow-500"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">En Attente</dt>
+                                <dd class="text-lg font-semibold text-gray-900">{{ stats.enAttente ?? 0 }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-laptop text-3xl text-green-500"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Actifs Disponibles</dt>
+                                <dd class="text-lg font-semibold text-gray-900">{{ stats.actifsDisponibles ?? 0 }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-chart-pie text-3xl text-purple-500"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Taux d'Occupation</dt>
+                                <dd class="text-lg font-semibold text-gray-900">{{ stats.tauxOccupation ?? '0%' }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulaire d'attribution rapide -->
+        <div class="bg-white shadow rounded-lg mb-6">
+            {{ form_start(form, {'attr': {'class': 'attribution-form'}}) }}
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                    <i class="fas fa-bolt mr-2 text-yellow-500"></i>
+                    Attribution Rapide
+                </h3>
+
+                {% if not form.vars.valid %}
+                    <div class="mb-4 rounded-md bg-red-50 p-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-exclamation-circle text-red-400"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium text-red-800">
+                                    Veuillez corriger les erreurs suivantes :
+                                </h3>
+                                <div class="mt-2 text-sm text-red-700">
+                                    {{ form_errors(form) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            {{ form_label(form.utilisateur) }}
+                        </label>
+                        {{ form_widget(form.utilisateur, {
+                            'attr': {
+                                'class': "block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            }
+                        }) }}
+                        <div class="text-red-600 text-xs mt-1">
+                            {{ form_errors(form.utilisateur) }}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            {{ form_label(form.actifs) }}
+                        </label>
+                        {{ form_widget(form.actifs, {
+                            'attr': {
+                                'class': "block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            }
+                        }) }}
+                        <div class="text-red-600 text-xs mt-1">
+                            {{ form_errors(form.actifs) }}
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            {{ form_label(form.dateAttribution) }}
+                        </label>
+                        {{ form_widget(form.dateAttribution, {
+                            'attr': {
+                                'class': "block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            }
+                        }) }}
+                        <div class="text-red-600 text-xs mt-1">
+                            {{ form_errors(form.dateAttribution) }}
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form_label(form.notes) }}
+                    </label>
+                    {{ form_widget(form.notes, {
+                        'attr': {
+                            'rows': '2',
+                            'class': "block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+                            'placeholder': "Notes sur cette attribution..."
+                        }
+                    }) }}
+                    <div class="text-red-600 text-xs mt-1">
+                        {{ form_errors(form.notes) }}
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end">
+                    <button type="submit"
+                            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-check mr-2"></i>
+                        Confirmer l'Attribution
+                    </button>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+
+
+        <!-- Historique des attributions -->
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Historique des Attributions
+                </h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                    {{ attributions|length }} attribution(s) au total
+                </p>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Utilisateur</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actif</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assigné par</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                    {% for attribution in attributions %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-10 w-10">
+                                        <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                                            {{ attribution.utilisateur.firstname.initials|default('??') }}
+                                        </div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">{{ attribution.utilisateur.firstname|default('Utilisateur inconnu') }}</div>
+                                        <div class="text-sm text-gray-500">{{ attribution.utilisateur.email|default('Non spécifié') }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">{{ attribution.actif.name|default('Actif inconnu') }}</div>
+                                <div class="text-sm text-gray-500">{{ attribution.actif.serie|default('N/A') }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">
+                                    {% if attribution.dateAttribution %}
+                                        {{ attribution.dateAttribution|date('d/m/Y') }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </div>
+                                <div class="text-sm text-gray-500">
+                                    {% if attribution.dateAttribution %}
+                                        {% set now = date() %}
+                                        {% set diff = now.diff(attribution.dateAttribution) %}
+
+                                        {% if diff.y > 0 %}
+                                            Il y a {{ diff.y }} an{{ diff.y > 1 ? 's' : '' }}
+                                        {% elseif diff.m > 0 %}
+                                            Il y a {{ diff.m }} mois
+                                        {% elseif diff.d > 0 %}
+                                            Il y a {{ diff.d }} jour{{ diff.d > 1 ? 's' : '' }}
+                                        {% elseif diff.h > 0 %}
+                                            Il y a {{ diff.h }} heure{{ diff.h > 1 ? 's' : '' }}
+                                        {% elseif diff.i > 0 %}
+                                            Il y a {{ diff.i }} minute{{ diff.i > 1 ? 's' : '' }}
+                                        {% else %}
+                                            À l'instant
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                        {% if attribution.statut == 'active' %}bg-green-100 text-green-800
+                                        {% elseif attribution.statut == 'pending' %}bg-yellow-100 text-yellow-800
+                                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                        <i class="fas
+                                            {% if attribution.statut == 'active' %}fa-check-circle
+                                            {% elseif attribution.statut == 'pending' %}fa-clock
+                                            {% else %}fa-times-circle{% endif %} mr-1">
+                                        </i>
+                                        {{ attribution.statut|default('inconnu')|capitalize }}
+                                    </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">{{ attribution.assigneur.nom|default('Système') }}</div>
+                                <div class="text-sm text-gray-500">{{ attribution.assigneur.role|default('Auto') }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <div class="flex justify-end space-x-2">
+                                    <!-- Bouton Restituer - visible seulement pour les attributions actives -->
+                                    {% if attribution.statut == 'attribue' or attribution.statut == 'pending' %}
+                                        <form action="{{ path('utilisateur_attribution_revoke', {'id': attribution.id}) }}" method="post" class="inline">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('revoke_' ~ attribution.id) }}">
+                                            <button type="submit"
+                                                    onclick="return confirm('Êtes-vous sûr de vouloir restituer cet actif ?');"
+                                                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
+                                                <i class="fas fa-undo mr-1.5"></i>
+                                                Restituer
+                                            </button>
+                                        </form>
+                                    {% endif %}
+
+{#                                    <!-- Bouton Voir détails -->#}
+{#                                    <a href="#" class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">#}
+{#                                        <i class="fas fa-eye mr-1.5"></i>#}
+{#                                        Détails#}
+{#                                    </a>#}
+
+
+                                    <!-- Bouton Approuver - visible seulement pour les attributions en attente -->
+                                    {% if attribution.statut == 'pending' %}
+                                        <form action="{{ path('utilisateur_attribution_approve', {'id': attribution.id}) }}" method="post" class="inline">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('approve_' ~ attribution.id) }}">
+                                            <button type="submit"
+                                                    onclick="return confirm('Êtes-vous sûr de vouloir approuver cette attribution ?');"
+                                                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
+                                                <i class="fas fa-check mr-1.5"></i>
+                                                Approuver
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
+                                Aucune attribution dans l'historique.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

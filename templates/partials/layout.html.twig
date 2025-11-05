@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+{#        ========================= SidBar ======================#}
+        {% include 'partials/sidbar.html.twig' %}
+
+{#        ========================== header ========================#}
+        {% include 'partials/header.html.twig' %}
+
+    <main class="lg:ml-64 pt-20 lg:pt-24 transition-all duration-300">
+        {% include 'partials/errors.html.twig' %}
+        <div class="p-4 sm:p-6 lg:p-8">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    <script>
+        // Auto-dismiss des messages flash après 5 secondes
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashMessages = document.querySelectorAll('.flash-message');
+
+            flashMessages.forEach(message => {
+                setTimeout(() => {
+                    message.style.opacity = '0';
+                    message.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => message.remove(), 500);
+                }, 5000);
+            });
+
+            // Fermeture manuelle
+            document.querySelectorAll('[onclick*="this.parentElement.remove()"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    this.closest('.flash-message').remove();
+                });
+            });
+        });
+    </script>
+
+    <style>
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .flash-success { border-left-color: #10B981; }
+        .flash-error { border-left-color: #EF4444; }
+        .flash-warning { border-left-color: #F59E0B; }
+        .flash-info { border-left-color: #3B82F6; }
+    </style>
+{% endblock %}
