@@ -205,7 +205,7 @@ class AppFixtures extends Fixture
         $actif->setCategory($category);
         // AJOUT DE LA LOGIQUE TYPE ET QUANTITE
         $actif->setType('materiel');
-        $actif->setQuantite(null);
+        $actif->setQuantite($faker->numberBetween(5, 50));
         $actif->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-2 years', '-1 month')));
         $actif->setUpdatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 month', 'now')));
     }
