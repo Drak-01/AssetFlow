@@ -57,10 +57,10 @@ composer install
 Copier la configuration :
 
 ```bash
-cp .env .env.local
+cp .env .env.dev
 ```
 
-Modifier `.env.local` selon vos accès BD :
+Modifier `.env.dev` selon vos accès BD :
 
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/assetflow?serverVersion=15&charset=utf8"
@@ -79,7 +79,7 @@ php bin/console doctrine:fixtures:load -n
 ### 3️⃣ Lancer le serveur
 
 ```bash
-symfony serve -d
+symfony serve 
 ```
 
 Application accessible sur 👉
